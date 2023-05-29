@@ -31,6 +31,9 @@ const App = {
     App.$.squares.forEach((square) => {
       square.addEventListener("click", (event) => {
         console.log(`Square with id ${event.target.id} was clicked`);
+
+        //<i class="fa-solid fa-x yellow"></i>
+        //<i class="fa-solid fa-o turquoise"></i>
       });
     });
   },
