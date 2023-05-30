@@ -8,6 +8,10 @@ const App = {
     squares: document.querySelectorAll('[data-id="square"]'),
   },
 
+  state: {
+    moves: [],
+  },
+
   init() {
     App.registerEventListeners();
   },
@@ -30,10 +34,51 @@ const App = {
     //TODO
     App.$.squares.forEach((square) => {
       square.addEventListener("click", (event) => {
-        console.log(`Square with id ${event.target.id} was clicked`);
+        //check if played if played return early
 
-        //<i class="fa-solid fa-x yellow"></i>
-        //<i class="fa-solid fa-o turquoise"></i>
+        if (square.hasChildNodes()) {
+          return;
+        }
+        //create icon and add icon depending on the current player
+        const lastMove = App.state.moves.at(-1);
+        const getOppositePlayer = (playerId) => (playerId === 1 ? 2 : 1);
+        const currentPlayer =
+          App.state.moves.length === 0
+            ? 1
+            : getOppositePlayer(lastMove.playerId);
+
+        const icon = document.createElement("i");
+
+        if (currentPlayer === 1) {
+          icon.classList.add("fa-solid", "fa-x", "yellow");
+        } else {
+          icon.classList.add("fa-solid", "fa-o", "turquoise");
+        }
+
+        App.state.moves.push({
+          square: +square.id,
+          playerId: currentPlayer,
+        });
+
+        //toggle player
+        App.state.currentPlayer = currentPlayer === 1 ? 2 : 1;
+
+        console.log(App.state);
+
+        square.replaceChildren(icon);
+
+        //check if there is a win or tie
+
+        const winningpatterns = [
+          [1, 2, 3],
+          [1, 5, 9],
+          [1, 4, 7],
+          [2, 5, 8],
+          [3, 5, 7],
+          [3, 6, 9],
+          [4, 5, 6],
+          [7, 8, 9],
+        ];
       });
     });
   },
