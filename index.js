@@ -28,6 +28,7 @@ const App = {
       console.log("Reset the game");
     });
     //TODO
+
     App.$.newRoundBtn.addEventListener("click", (event) => {
       console.log("new round");
     });
@@ -36,9 +37,17 @@ const App = {
       square.addEventListener("click", (event) => {
         //check if played if played return early
 
-        if (square.hasChildNodes()) {
+        const hasMove = (squareId) => {
+          const existingMove = App.state.moves.find(
+            (move) => move.squareId === squareId
+          );
+          return existingMove !== undefined;
+        };
+
+        if (hasMove(+square.id)) {
           return;
         }
+
         //create icon and add icon depending on the current player
         const lastMove = App.state.moves.at(-1);
         const getOppositePlayer = (playerId) => (playerId === 1 ? 2 : 1);
@@ -59,7 +68,6 @@ const App = {
           square: +square.id,
           playerId: currentPlayer,
         });
-
         //toggle player
         App.state.currentPlayer = currentPlayer === 1 ? 2 : 1;
 
